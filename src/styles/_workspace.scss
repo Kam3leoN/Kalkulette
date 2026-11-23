@@ -1,0 +1,120 @@
+@use 'tokens' as *;
+
+.work {
+  min-width: 0;
+  padding: 8px 8px 20px;
+  border-radius: var(--r-xxl);
+  background: var(--k3-sys-color-surface-container-low);
+
+  k3-tabs {
+    display: block;
+
+    &::part(tablist) {
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+  }
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 0;
+
+  &[hidden] {
+    display: none;
+  }
+
+  h2 {
+    margin: 0;
+    @include type(headline-small, 1.2, $emphasized: true);
+    text-wrap: balance;
+  }
+}
+
+.lede {
+  max-width: 70ch;
+  margin: -8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  &.between {
+    justify-content: space-between;
+  }
+}
+
+.surface {
+  padding: 16px;
+  border-radius: var(--r-xl);
+  background: var(--k3-sys-color-surface-container);
+
+  h3 {
+    margin: 0 0 12px;
+    @include type(title-medium, 1.3, $emphasized: true);
+  }
+
+  .row h3 {
+    margin: 0;
+  }
+}
+
+.err-msg {
+  color: var(--k3-sys-color-error);
+  font-size: 14px;
+}
+
+/* Carte de résultat commune aux outils */
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: var(--r-xli);
+  @include role(secondary-container, on-secondary-container);
+  transition: border-radius var(--dur) var(--ease);
+
+  &.is-err {
+    @include role(error-container, on-error-container);
+  }
+
+  .rt {
+    opacity: 0.8;
+    font: 500 13px var(--f-plain);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .err-text {
+    font-size: 16px;
+  }
+}
+
+.bigval {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  font: 400 34px/1.2 var(--f-brand);
+  font-variant-numeric: tabular-nums;
+}
+
+.exact {
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: var(--k3-sys-color-surface-container-lowest);
+  color: var(--on-bg);
+  font: 500 14px/1 var(--f-code);
+
+  &.exact-block {
+    align-self: flex-start;
+  }
+}

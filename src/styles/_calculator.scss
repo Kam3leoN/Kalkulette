@@ -1,0 +1,318 @@
+@use 'sass:list';
+@use 'tokens' as *;
+
+// Couleur de chaque famille de touches : [fond, texte] en rôles M3
+$key-roles: (
+  'fn': ('surface-container-high', 'on-surface'),
+  'num': ('surface-container-highest', 'on-surface'),
+  'op': ('secondary-container', 'on-secondary-container'),
+  'clr': ('tertiary-container', 'on-tertiary-container'),
+  'eq': ('primary', 'on-primary'),
+  'var': ('surface-container-highest', 'on-surface'),
+);
+
+.calc {
+  position: sticky;
+  top: 12px;
+  padding: 14px 14px 16px;
+  border-radius: var(--r-xxl);
+  background: var(--k3-sys-color-surface-container);
+
+  @include stacked {
+    position: static;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+.calc-head {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0 12px;
+
+  k3-button-group {
+    width: 100%;
+  }
+}
+
+/* ---------- Écran ---------- */
+.display {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 170px;
+  padding: 14px 20px;
+  border-radius: var(--r-xli);
+  background: var(--k3-sys-color-surface-container-lowest);
+  transition: border-radius var(--dur) var(--ease);
+
+  .calc.shift & {
+    border-radius: var(--r-l);
+  }
+
+  &.err {
+    @include role(error-container, on-error-container);
+
+    .expr,
+    .sub {
+      color: inherit;
+    }
+  }
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.pill {
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--k3-sys-color-surface-container-high);
+  color: var(--muted);
+  font: 600 11px/1 var(--f-plain);
+  letter-spacing: 0.04em;
+  transition: background 0.2s, color 0.2s;
+
+  &.on {
+    @include role(primary, on-primary);
+  }
+  &.ghost {
+    opacity: 0.45;
+  }
+  &.sp {
+    margin-left: auto;
+  }
+}
+
+.expr {
+  min-height: 34px;
+  padding-top: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  color: var(--muted);
+  font: 400 22px/32px var(--f-plain);
+  @include no-scrollbar;
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 26px;
+  margin: 0 -1px;
+  border-radius: 2px;
+  background: var(--k3-sys-color-primary);
+  vertical-align: -6px;
+  animation: blink 1.05s steps(1) infinite;
+
+  @include reduced-motion {
+    animation: none;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.res {
+  min-height: 52px;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-align: right;
+  @include type(display-medium, 1.15);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  @include no-scrollbar;
+
+  .msg {
+    font: 500 20px/52px var(--f-plain);
+  }
+
+  &.pop {
+    animation: pop 0.5s var(--ease);
+
+    @include reduced-motion {
+      animation: none;
+    }
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: translateY(8px);
+    opacity: 0.2;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.sub {
+  min-height: 20px;
+  overflow-x: auto;
+  white-space: nowrap;
+  text-align: right;
+  color: var(--muted);
+  font: 400 14px/20px var(--f-plain);
+  @include no-scrollbar;
+}
+
+/* ---------- Panneau du mode CALC ---------- */
+.calcpanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--r-xl);
+  background: var(--k3-sys-color-surface-container-high);
+
+  &[hidden] {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+}
+
+.cvars {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.cvars-empty {
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.crow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  k3-select {
+    width: 130px;
+  }
+}
+
+/* ---------- Clavier ---------- */
+.keys {
+  display: grid;
+  margin-top: 14px;
+
+  &.fn {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px 6px;
+  }
+
+  &.main {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+}
+
+// Fonction SHIFT imprimée au-dessus de la touche ; elle s'allume quand SHIFT est actif
+.alt {
+  min-height: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--k3-sys-color-tertiary);
+  font: 600 10.5px/14px var(--f-plain);
+  transition: color 0.2s, transform 0.3s var(--ease);
+
+  .calc.shift &:not(:empty) {
+    color: var(--k3-sys-color-primary);
+    font-weight: 700;
+    transform: scale(1.15);
+  }
+}
+
+.key {
+  width: 100%;
+  --k3-btn-pad-inline: 0;
+
+  &::part(container) {
+    width: 100%;
+    justify-content: center;
+    font-family: var(--f-plain);
+  }
+
+  .calc.shift .cell.has-alt &::part(container) {
+    opacity: 0.7;
+  }
+
+  .keys.fn & {
+    --k3-btn-height: 2.5rem;
+    --k3-btn-font-size: 15px;
+  }
+
+  .keys.main & {
+    --k3-btn-height: 3.75rem;
+    --k3-btn-font-size: 26px;
+    --k3-btn-font-weight: 400;
+    --k3-btn-radius-square: 1.25rem;
+
+    &.small {
+      --k3-btn-font-size: 17px;
+      --k3-btn-font-weight: 500;
+    }
+  }
+}
+
+@each $name, $role in $key-roles {
+  .k-#{$name}::part(container) {
+    background: var(--k3-sys-color-#{list.nth($role, 1)});
+    color: var(--k3-sys-color-#{list.nth($role, 2)});
+  }
+}
+
+.k-clr::part(container) {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.k-eq::part(container) {
+  font-size: 30px;
+}
+
+.k-var::part(container) {
+  font-family: var(--f-code);
+  font-weight: 500;
+}
+
+// SHIFT et hyp : contour au repos, plein (et carré, via K3ui) une fois activés
+.k-toggle {
+  &::part(container) {
+    background: transparent;
+    color: var(--k3-sys-color-primary);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: inset 0 0 0 1px var(--k3-sys-color-outline-variant);
+  }
+
+  &[selected]::part(container) {
+    @include role(primary, on-primary);
+    box-shadow: none;
+  }
+}

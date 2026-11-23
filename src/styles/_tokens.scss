@@ -1,0 +1,46 @@
+// Points de rupture et utilitaires partagés.
+// Les couleurs, formes, typo et mouvements viennent des tokens K3ui (--k3-sys-*), générés à l'exécution.
+
+$bp-mobile: 600px; // en dessous : feuille du bas + barre de navigation
+$bp-stack: 1000px; // en dessous : calculatrice et outils l'un sous l'autre
+$bp-conv: 680px;
+
+@mixin mobile {
+  @media (max-width: #{$bp-mobile - 0.02px}) {
+    @content;
+  }
+}
+
+@mixin stacked {
+  @media (max-width: $bp-stack) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/// Raccourci typographique sur l'échelle M3 de K3ui (ex. headline-small, emphasized).
+@mixin type($role, $line-height: 1.2, $emphasized: false, $family: var(--f-brand)) {
+  $weight: '#{$role}-weight';
+  @if $emphasized {
+    $weight: '#{$role}-emphasized-weight';
+  }
+  font: var(--k3-sys-typescale-#{$weight}, 500) var(--k3-sys-typescale-#{$role}-size, 1rem) / #{$line-height} $family;
+}
+
+/// Rôle de couleur M3 : fond + texte associé.
+@mixin role($container, $on) {
+  background: var(--k3-sys-color-#{$container});
+  color: var(--k3-sys-color-#{$on});
+}

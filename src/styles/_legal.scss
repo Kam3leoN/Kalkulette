@@ -1,0 +1,59 @@
+@use 'tokens' as *;
+
+#legal {
+  --k3-dialog-max-width: 34rem;
+}
+
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+
+  p {
+    margin: 0;
+  }
+
+  .copy {
+    color: var(--k3-sys-color-primary);
+    font: 600 14px/1.4 var(--f-plain);
+  }
+
+  h3 {
+    margin: 4px 0 0;
+    @include type(title-small, 1.4, $emphasized: true);
+    letter-spacing: 0.01em;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    padding: 10px 14px;
+    border-radius: var(--r-l);
+    background: var(--k3-sys-color-surface-container-high);
+
+    b {
+      display: block;
+      color: var(--k3-sys-color-on-surface);
+      font-weight: 600;
+    }
+  }
+
+  .third {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  a {
+    color: var(--k3-sys-color-primary);
+    font-weight: 600;
+  }
+}

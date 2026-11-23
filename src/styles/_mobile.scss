@@ -1,0 +1,43 @@
+@use 'tokens' as *;
+
+// Sous 600 px : les outils s'ouvrent dans une feuille du bas, depuis une barre de navigation
+#navBar {
+  display: none;
+}
+
+@include mobile {
+  .work {
+    display: none;
+  }
+
+  .wrap {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  #navBar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    display: block;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: var(--k3-sys-color-surface-container);
+  }
+
+  #sheet {
+    .pane {
+      padding: 4px 0 8px;
+
+      // le titre de la feuille remplace celui du panneau
+      > h2:first-child,
+      .row.between > h2 {
+        display: none;
+      }
+    }
+
+    .plotwrap {
+      height: 300px;
+    }
+  }
+}
